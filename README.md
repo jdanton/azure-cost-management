@@ -163,6 +163,25 @@ Analyzes Azure workloads for reservation and savings plan coverage and opportuni
 .\azure-tagging-policy.ps1 -AllowedEnvironments @("dev", "staging", "prod", "sandbox")
 ```
 
+### Reservations & Savings Plans Analyzer
+
+```powershell
+# Quick analysis of current subscription
+.\azure-reservations-savingsplans.ps1
+
+# Full analysis with HTML and CSV export
+.\azure-reservations-savingsplans.ps1 -ExportPath "C:\Reports" -LookbackDays 30
+
+# Flag only severely under-utilized commitments
+.\azure-reservations-savingsplans.ps1 -UtilizationThresholdPct 50 -ExpiryWarningDays 30
+
+# Analyze a specific subscription
+.\azure-reservations-savingsplans.ps1 -BillingScope "your-subscription-id"
+
+# Skip Advisor recommendations (faster)
+.\azure-reservations-savingsplans.ps1 -IncludeAdvisor $false
+```
+
 ## Parameters
 
 ### Cost Optimization Runbook
@@ -186,6 +205,17 @@ Analyzes Azure workloads for reservation and savings plan coverage and opportuni
 | `AllowedEnvironments` | `@("dev", "development", "test", "qa", "staging", "uat", "preprod", "prod", "production", "sandbox", "dr")` | Permitted values for the Environment tag |
 | `CreateRemediationTasks` | `$false` | When true, creates remediation tasks for tag inheritance |
 | `InitiativeDisplayName` | `Require Mandatory Resource Tags` | Display name for the policy initiative |
+
+### Reservations & Savings Plans Analyzer
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `BillingScope` | All subscriptions | Subscription ID, billing account ID, or EA enrollment account |
+| `UtilizationThresholdPct` | `80` | Reservations/SPs below this % are flagged as under-utilized |
+| `ExpiryWarningDays` | `90` | Commitments expiring within this window are flagged |
+| `LookbackDays` | `30` | Days of usage data for recommendations (7, 30, or 60) |
+| `ExportPath` | — | Folder path for HTML report and CSV exports |
+| `IncludeAdvisor` | `$true` | Pull Azure Advisor cost recommendations |
 
 ## Safety Features
 
