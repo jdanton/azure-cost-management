@@ -2,7 +2,7 @@
 
 A collection of Azure Automation runbooks and scripts for aggressive cost optimization across Azure subscriptions.
 
-> **Created by [Joey D'Antoni] and [John Morehouse], Microsoft Data Platform MVPs and hosts of [Azure Cloud Chronicles](https://azurecloudchronicles.com).**
+> **Created by [Joey D'Antoni](https://bsky.app/profile/joeydantoni.com) and [John Morehouse](https://bsky.app/profile/sqlrus.bsky.social), Microsoft Data Platform MVPs and hosts of [Azure Cloud Chronicles](https://azurecloudchronicles.com).**
 
 ## Overview
 
@@ -129,7 +129,7 @@ MIT
 
 ## Authors
 
-- **Joey D'Antoni** - Microsoft Data Platform MVP - [@jaborooza](https://twitter.com/jaborooza)
-- **John Morehouse** - Microsoft Data Platform MVP - [@sqlrus](https://twitter.com/sqlrus)
+- **Joey D'Antoni** - Microsoft Data Platform MVP - [@jaborooza](https://bsky.app/profile/joeydantoni.com)
+- **John Morehouse** - Microsoft Data Platform MVP - [@sqlrus](https://bsky.app/profile/sqlrus.bsky.social)
 
 *From the [Azure Cloud Chronicles](https://azurecloudchronicles.com) team*
