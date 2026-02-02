@@ -228,7 +228,8 @@ Analyzes Azure workloads for reservation and savings plan coverage and opportuni
 
 ### Required Azure PowerShell Modules
 
-Import these modules in your Automation Account:
+Import these modules in your Automation Account (or install locally for interactive scripts):
+
 - Az.Accounts
 - Az.Resources
 - Az.Sql
@@ -240,10 +241,16 @@ Import these modules in your Automation Account:
 - Az.Monitor
 - Az.CosmosDB
 - Az.Aks
+- Az.Advisor (for reservations analyzer)
+- Az.Billing (for reservations analyzer)
 
 ### Permissions
 
-The Automation Account's managed identity requires **Contributor** role on each target subscription.
+| Script | Required Role |
+|--------|---------------|
+| Cost Optimization Runbook | **Contributor** on target subscriptions |
+| Tagging Policy | **Owner** or **Resource Policy Contributor** on target scope |
+| Reservations Analyzer | **Reader** + **Reservation Reader** or **Billing Reader** |
 
 ## Warning
 
