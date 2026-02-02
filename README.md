@@ -10,6 +10,7 @@ This repository contains automation tools designed to identify and reduce Azure 
 
 - **Cost Optimization Runbook** — Sweeps subscriptions to pause, stop, scale down, or remove underutilized and orphaned resources
 - **Tagging Policy** — Deploys Azure Policy to enforce mandatory tags for cost allocation and accountability
+- **Reservations & Savings Plans Analyzer** — Audits existing commitments, identifies coverage gaps, and surfaces purchase recommendations
 
 ## Scripts
 
@@ -84,6 +85,43 @@ The initiative contains three policy types per tag:
 2. Review compliance in Azure Portal → Policy → Compliance
 3. Run remediation tasks to backfill tags on existing resources
 4. Switch to `-EnforcementMode Deny` once compliance is high
+
+---
+
+### `azure-reservations-savingsplans.ps1`
+
+Analyzes Azure workloads for reservation and savings plan coverage and opportunities. Run interactively from PowerShell to generate a comprehensive report.
+
+#### What It Analyzes
+
+**Existing Commitments**
+- All active Reservations — utilization %, unused hours, scope, expiry
+- All active Savings Plans — utilization %, commitment amount, expiry
+- Under-utilized commitments (below configurable threshold)
+- Commitments expiring within configurable window
+
+**Coverage Gap Analysis** (per subscription)
+- Virtual Machines not covered by RI or Savings Plan
+- SQL Databases, Elastic Pools, and Managed Instances
+- Cosmos DB provisioned throughput
+- App Service Plans (Premium/Isolated tiers)
+- Redis Cache (Premium/Enterprise SKUs)
+- Premium/Ultra Managed Disks
+- Data Explorer (Kusto) clusters
+- Synapse Dedicated SQL Pools
+- Databricks workspaces
+- Azure VMware Solution nodes
+
+**Recommendations**
+- Azure Advisor reservation & savings plan recommendations
+- Consumption API recommendations (7/30/60-day lookback)
+- High-uptime VM candidates (>95% availability)
+
+#### Output
+
+- Console report with color-coded findings
+- Optional HTML report with summary cards and detailed tables
+- CSV exports for reservations, savings plans, and all findings
 
 ## Usage
 
