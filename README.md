@@ -6,7 +6,10 @@ A collection of Azure Automation runbooks and scripts for aggressive cost optimi
 
 ## Overview
 
-This repository contains automation tools designed to identify and reduce Azure spend in non-production environments. The primary runbook performs a comprehensive sweep of your subscriptions to pause, stop, scale down, or remove underutilized and orphaned resources.
+This repository contains automation tools designed to identify and reduce Azure spend and improve governance. It includes:
+
+- **Cost Optimization Runbook** — Sweeps subscriptions to pause, stop, scale down, or remove underutilized and orphaned resources
+- **Tagging Policy** — Deploys Azure Policy to enforce mandatory tags for cost allocation and accountability
 
 ## Scripts
 
@@ -50,7 +53,41 @@ An Azure Automation runbook that aggressively reduces costs across all accessibl
 - API Management (Premium tier)
 - Machine Learning workspaces
 
+---
+
+### `azure-tagging-policy.ps1`
+
+Deploys an Azure Policy initiative that enforces mandatory resource tagging for cost allocation and governance.
+
+#### Required Tags
+
+| Tag | Description | Validation |
+|-----|-------------|------------|
+| `CostCenter` | Finance/billing charge code | Must not be empty |
+| `Environment` | Deployment stage (dev, prod, etc.) | Must be from allowed values list |
+| `Department` | Owning business unit | Must not be empty |
+| `CreatedDate` | Date the resource was created | Must match `YYYY-MM-DD` format |
+| `Owner` | Responsible person/team email | Must not be empty |
+| `Application` | Application or workload name | Must not be empty |
+
+#### Policy Effects
+
+The initiative contains three policy types per tag:
+
+1. **DENY** — Blocks resource creation/update if the tag is missing or invalid
+2. **AUDIT** — Reports non-compliance without blocking (for existing resources)
+3. **INHERIT** — Automatically copies tag values from the resource group to child resources
+
+#### Recommended Rollout
+
+1. Deploy with `-EnforcementMode Audit` to assess current compliance
+2. Review compliance in Azure Portal → Policy → Compliance
+3. Run remediation tasks to backfill tags on existing resources
+4. Switch to `-EnforcementMode Deny` once compliance is high
+
 ## Usage
+
+### Cost Optimization Runbook
 
 ```powershell
 # Dry run (default) - no changes made, only reports what would happen
@@ -70,7 +107,27 @@ An Azure Automation runbook that aggressively reduces costs across all accessibl
                          -ExcludeResourceGroups @("rg-keep-this", "rg-important")
 ```
 
+### Tagging Policy
+
+```powershell
+# Audit mode — assess compliance without blocking anything
+.\azure-tagging-policy.ps1 -EnforcementMode Audit
+
+# Enforce at subscription level (blocks non-compliant resources)
+.\azure-tagging-policy.ps1 -EnforcementMode Deny
+
+# Enforce at management group level with remediation tasks
+.\azure-tagging-policy.ps1 -ManagementGroupName "mg-corp" `
+                           -EnforcementMode Deny `
+                           -CreateRemediationTasks $true
+
+# Custom environment values
+.\azure-tagging-policy.ps1 -AllowedEnvironments @("dev", "staging", "prod", "sandbox")
+```
+
 ## Parameters
+
+### Cost Optimization Runbook
 
 | Parameter | Default | Description |
 |-----------|---------|-------------|
@@ -80,6 +137,17 @@ An Azure Automation runbook that aggressively reduces costs across all accessibl
 | `ExcludeSubscriptionIds` | `@()` | Array of subscription IDs to skip |
 | `ExcludeResourceGroups` | `@()` | Array of resource group names to skip (case-insensitive) |
 | `ProductionKeywords` | `@("prod", "production", "prd", "live")` | Keywords that trigger production protection |
+
+### Tagging Policy
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `SubscriptionId` | Current context | Target subscription (omit to use current Az context) |
+| `ManagementGroupName` | — | Assign at management group scope instead of subscription |
+| `EnforcementMode` | `Deny` | `Deny` blocks non-compliant resources; `Audit` only reports |
+| `AllowedEnvironments` | `@("dev", "development", "test", "qa", "staging", "uat", "preprod", "prod", "production", "sandbox", "dr")` | Permitted values for the Environment tag |
+| `CreateRemediationTasks` | `$false` | When true, creates remediation tasks for tag inheritance |
+| `InitiativeDisplayName` | `Require Mandatory Resource Tags` | Display name for the policy initiative |
 
 ## Safety Features
 
@@ -120,8 +188,8 @@ Always execute with `-DryRun $true` first and carefully review the output before
 Additional scripts and functionality coming soon:
 - Cost anomaly detection and alerting
 - Scheduled scaling policies
-- Resource tagging compliance reports
 - Budget threshold automation
+- Reserved instance recommendations
 
 ## License
 
