@@ -264,7 +264,7 @@ Additional scripts and functionality coming soon:
 - Cost anomaly detection and alerting
 - Scheduled scaling policies
 - Budget threshold automation
-- Reserved instance recommendations
+- Spot VM opportunity analysis
 
 ## License
 
