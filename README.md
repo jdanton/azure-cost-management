@@ -272,7 +272,7 @@ MIT
 
 ## Authors
 
-- **Joey D'Antoni** - Microsoft Data Platform MVP - [@jaborooza](https://bsky.app/profile/joeydantoni.com)
-- **John Morehouse** - Microsoft Data Platform MVP - [@sqlrus](https://bsky.app/profile/sqlrus.bsky.social)
+- **Joey D'Antoni** - Microsoft Data Platform MVP - [@joeydantoni.com](https://bsky.app/profile/joeydantoni.com)
+- **John Morehouse** - Microsoft Data Platform MVP - [@sqlrus.bsky.social](https://bsky.app/profile/sqlrus.bsky.social)
 
 *From the [Azure Cloud Chronicles](https://azurecloudchronicles.com) team*
